@@ -1,0 +1,22 @@
+<div>
+  <div class="language-selector">
+    <div>
+      <label for="languageDropdown">Language:</label>
+      <select id="languageDropdown" class="ms-3" [(ngModel)]="selectedLanguage" (change)="changeLanguage()">
+        <option *ngFor="let lang of supportedLanguages" [value]="lang.value">
+          {{ lang.label }}
+        </option>
+      </select>
+    </div>
+    <div>
+      <button type="button" class="btn btn-warning me-3">Clear</button>
+      <button type="button" class="btn btn-success" (click)="runTheEditorCode()">Run ▶</button>
+      <div (click)="runTheEditorCode()">Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolores, necessitatibus.</div>
+    </div>
+  </div>
+</div>
+
+
+@if (isBrowser) {
+  <ngx-monaco-editor [options]="editorOptions" [(ngModel)]="code"></ngx-monaco-editor>
+}
