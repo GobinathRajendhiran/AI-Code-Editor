@@ -56,3 +56,29 @@ ngx-monaco-editor {
 .overflow-guard {
     height: 100%;
 }
+
+.outputSectionMain {
+  border: 1px solid #666666;
+  margin: 12px 16px;
+  padding: 5px 10px;
+  border-radius: 9px;
+}
+
+.outputSectionHeader {
+  border-bottom: 1px solid #666666;
+  padding-bottom: 5px;
+  margin-bottom: 10px;
+
+  h5 {
+    margin: 0;
+    color: #000000;
+    font-size: 16px;
+    font-weight: 600;
+  }
+}
+
+.outputSectionBody {
+  background-color: #f1f1f1;
+  padding: 10px;
+  border-radius: 4px;
+}

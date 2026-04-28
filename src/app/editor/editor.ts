@@ -1,4 +1,4 @@
-import { Component, PLATFORM_ID, inject } from '@angular/core';
+import { Component, ElementRef, OnInit, PLATFORM_ID, inject, viewChild } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { EditorComponent } from "ngx-monaco-editor-v2";
@@ -11,7 +11,7 @@ import { CommonModule } from '@angular/common';
   templateUrl: './editor.html',
   styleUrl: './editor.scss',
 })
-export class Editor {
+export class Editor implements OnInit {
   private platformId = inject(PLATFORM_ID);
   isBrowser = isPlatformBrowser(this.platformId);
   
@@ -19,6 +19,7 @@ export class Editor {
   
   editorOptions = { theme: 'vs-dark', language: this.selectedLanguage, automaticLayout: false }
   code: string = `function hello() { console.log('Welcome to the Monaco editor Mr Gobinath') }`;
+  consoleOutput: string[] = [];
 
   supportedLanguages = [
     { label: 'JavaScript', value: 'javascript' },
@@ -53,6 +54,20 @@ export class Editor {
     { label: 'GraphQL', value: 'graphql' },
   ];
 
+  ngOnInit(): void {
+    window.addEventListener('message', (event) => {
+      if (!event.data) return;
+
+      if (event.data.type === 'log') {
+        this.consoleOutput.push(event.data.data.join(' '));
+      }
+
+      if (event.data.type === 'error') {
+        this.consoleOutput.push('❌ ' + event.data.data);
+      }
+    });
+  };
+
   changeLanguage() {
     this.editorOptions = { 
       ...this.editorOptions, 
@@ -60,8 +75,33 @@ export class Editor {
     };
   }
 
+  iframeOutput = viewChild<ElementRef>('iframeOutput');
+
   runTheEditorCode() {
-    console.log("Running the code...");
-    console.log("CODE : ",this.code)
+    this.consoleOutput = [];
+
+    let code = 
+    `<DOCTYPE html>
+      <html>
+        <body>
+          <script>
+            const log = console.log;
+            console.log = function(...args) {
+              parent.postMessage({ type: 'log', data: args }, '*');
+              log.apply(console, args);
+            };
+
+            try {
+              ${this.code};
+            } catch (error) {
+              parent.postMessage({ type: 'error', data: error.toString() }, '*');
+            }
+          </script>
+        </body>
+      </html>`;
+
+      let outputFrame = this.iframeOutput()?.nativeElement as HTMLIFrameElement;
+      outputFrame.srcdoc = code;
   }
+
 }
