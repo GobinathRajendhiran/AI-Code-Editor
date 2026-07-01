@@ -1,36 +1,242 @@
-<div>
-  <div class="language-selector">
+<div class="code-analyzer-page">
+  <div class="page-header">
     <div>
-      <label for="languageDropdown">Language:</label>
-      <select id="languageDropdown" class="ms-3" [(ngModel)]="selectedLanguage" (change)="changeLanguage()">
-        <option *ngFor="let lang of supportedLanguages" [value]="lang.value">
-          {{ lang.label }}
-        </option>
-      </select>
-    </div>
-    <div>
-      <button type="button" class="btn btn-warning me-3" (click)="code = ''">Clear</button>
-      <button type="button" class="btn btn-success" (click)="runTheEditorCode()">Run ▶</button>
+      <p class="eyebrow">Interview Practice</p>
+      <h1>Code AI Analyzer</h1>
+      <p class="subtitle">
+        Select a question, write your solution, and get AI-based feedback.
+      </p>
     </div>
   </div>
-</div>
 
+  <div class="analyzer-layout">
 
-@if (isBrowser) {
-  <ngx-monaco-editor [options]="editorOptions" [(ngModel)]="code"></ngx-monaco-editor>
-}
+    <!-- LEFT PANEL -->
+    <aside class="problem-panel">
+      <div class="panel-card">
+        <label for="problemSelector" class="field-label">
+          Select Problem
+        </label>
 
-<div class="outputSectionMain">
-  <div class="outputSectionHeader">
-    <h5>Output</h5>
-  </div>
-  <div class="outputSectionBody">
-    <iframe #iframeOutput sandbox="allow-scripts"></iframe>
-    <h1>CONSOLE</h1>
-    <div> LOOP
-      @for (log of consoleOutput; track $index) {
-        <div>{{log}}</div>
-      }
-    </div>
+        <select
+          id="problemSelector"
+          class="problem-select"
+          [(ngModel)]="selectedQuestionId"
+          (change)="onQuestionChange()"
+        >
+          <option value="">Choose a question</option>
+
+          <option
+            *ngFor="let question of questions"
+            [value]="question.id"
+          >
+            {{ question.title }} - {{ question.difficulty }}
+          </option>
+        </select>
+      </div>
+
+      <div class="panel-card" *ngIf="selectedQuestion">
+        <div class="question-meta">
+          <span class="badge topic">
+            {{ selectedQuestion.topic }}
+          </span>
+
+          <span
+            class="badge"
+            [ngClass]="{
+              'easy': selectedQuestion.difficulty === 'Easy',
+              'medium': selectedQuestion.difficulty === 'Medium',
+              'hard': selectedQuestion.difficulty === 'Hard'
+            }"
+          >
+            {{ selectedQuestion.difficulty }}
+          </span>
+        </div>
+
+        <h2 class="question-title">
+          {{ selectedQuestion.title }}
+        </h2>
+
+        <p class="question-brief">
+          {{ selectedQuestion.brief }}
+        </p>
+
+        <div class="question-section">
+          <h3>Description</h3>
+          <p>{{ selectedQuestion.description }}</p>
+        </div>
+
+        <div class="question-section">
+          <h3>Sample Input</h3>
+          <pre>{{ selectedQuestion.sampleInput }}</pre>
+        </div>
+
+        <div class="question-section">
+          <h3>Sample Output</h3>
+          <pre>{{ selectedQuestion.sampleOutput }}</pre>
+        </div>
+
+        <div class="question-section">
+          <h3>Explanation</h3>
+          <p>{{ selectedQuestion.explanation }}</p>
+        </div>
+
+        <div class="question-section">
+          <h3>Constraints</h3>
+          <p>{{ selectedQuestion.constraints }}</p>
+        </div>
+
+        <div class="tag-list" *ngIf="selectedQuestion.tags.length">
+          <span
+            class="tag"
+            *ngFor="let tag of selectedQuestion.tags"
+          >
+            #{{ tag }}
+          </span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- RIGHT PANEL -->
+    <main class="editor-panel">
+
+      <section class="editor-card">
+        <div class="editor-header">
+          <div>
+            <h2>Code Editor</h2>
+            <p>
+              Language:
+              <strong>{{ selectedQuestion?.language || 'JavaScript' }}</strong>
+            </p>
+          </div>
+
+          <button
+            type="button"
+            class="btn btn-light"
+            (click)="resetStarterCode()"
+            [disabled]="!selectedQuestion"
+          >
+            Reset Code
+          </button>
+        </div>
+
+        <!-- Simple textarea version -->
+        <textarea
+          class="code-editor"
+          [(ngModel)]="userCode"
+          spellcheck="false"
+          placeholder="Select a question to load starter code..."
+        ></textarea>
+
+        <!-- If you use Monaco later, replace textarea with ngx-monaco-editor -->
+        <!--
+        <ngx-monaco-editor
+          class="monaco-editor"
+          [options]="editorOptions"
+          [(ngModel)]="userCode">
+        </ngx-monaco-editor>
+        -->
+
+        <div class="editor-actions">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            (click)="saveAttempt()"
+            [disabled]="!selectedQuestion || !userCode.trim()"
+          >
+            Save Attempt
+          </button>
+
+          <button
+            type="button"
+            class="btn btn-primary"
+            (click)="analyzeCode()"
+            [disabled]="!selectedQuestion || !userCode.trim()"
+          >
+            Analyze Code
+          </button>
+        </div>
+      </section>
+
+      <!-- AI RESULT PANEL -->
+      <section class="result-card" *ngIf="aiResult">
+        <div class="result-header">
+          <h2>AI Result</h2>
+          <span class="score-pill">
+            Score: {{ aiResult.score }}/100
+          </span>
+        </div>
+
+        <div class="result-grid">
+          <div class="result-box">
+            <h3>Correctness</h3>
+            <p>{{ aiResult.correctness }}</p>
+          </div>
+
+          <div class="result-box">
+            <h3>Code Quality</h3>
+            <p>{{ aiResult.codeQuality }}</p>
+          </div>
+
+          <div class="result-box">
+            <h3>Time Complexity</h3>
+            <p>{{ aiResult.timeComplexity }}</p>
+          </div>
+
+          <div class="result-box">
+            <h3>Space Complexity</h3>
+            <p>{{ aiResult.spaceComplexity }}</p>
+          </div>
+        </div>
+
+        <div class="result-section">
+          <h3>Mistakes</h3>
+          <ul>
+            <li *ngFor="let mistake of aiResult.mistakes">
+              {{ mistake }}
+            </li>
+          </ul>
+        </div>
+
+        <div class="result-section">
+          <h3>Better Solution</h3>
+          <pre>{{ aiResult.betterSolution }}</pre>
+        </div>
+
+        <div class="result-section">
+          <h3>Interview Explanation</h3>
+          <p>{{ aiResult.interviewExplanation }}</p>
+        </div>
+      </section>
+
+      <!-- SAVED ATTEMPTS -->
+      <section class="attempt-card" *ngIf="savedAttempts.length">
+        <div class="section-header">
+          <h2>Saved Attempts</h2>
+          <p>Your previous solutions for this question.</p>
+        </div>
+
+        <div
+          class="attempt-item"
+          *ngFor="let attempt of savedAttempts; let i = index"
+        >
+          <div class="attempt-header">
+            <strong>Attempt {{ i + 1 }}</strong>
+            <span>{{ attempt.createdAt | date: 'medium' }}</span>
+          </div>
+
+          <pre>{{ attempt.code }}</pre>
+
+          <button
+            type="button"
+            class="btn btn-small"
+            (click)="loadAttempt(attempt)"
+          >
+            Load Attempt
+          </button>
+        </div>
+      </section>
+
+    </main>
   </div>
 </div>

@@ -1,0 +1,269 @@
+// question creation form for admin
+* {
+  box-sizing: border-box;
+}
+
+.admin-page {
+  min-height: 100vh;
+  padding: 32px;
+  background:
+    radial-gradient(circle at top left, rgba(79, 70, 229, 0.12), transparent 32%),
+    linear-gradient(135deg, #f8fafc 0%, #eef2ff 100%);
+  color: #0f172a;
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+.page-header {
+  max-width: 1180px;
+  margin: 0 auto 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.eyebrow {
+  margin: 0 0 6px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #4f46e5;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.page-header h1 {
+  margin: 0;
+  font-size: 34px;
+  line-height: 1.2;
+  color: #111827;
+}
+
+.subtitle {
+  margin: 8px 0 0;
+  color: #64748b;
+  font-size: 15px;
+}
+
+.question-form {
+  max-width: 1180px;
+  margin: 0 auto;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(280px, 0.8fr);
+  gap: 22px;
+  margin-bottom: 22px;
+}
+
+.form-card {
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  border-radius: 22px;
+  padding: 24px;
+  margin-bottom: 22px;
+  box-shadow: 0 20px 50px rgba(15, 23, 42, 0.08);
+  backdrop-filter: blur(14px);
+}
+
+.main-card,
+.side-card {
+  margin-bottom: 0;
+}
+
+.section-header {
+  margin-bottom: 20px;
+}
+
+.section-header h2 {
+  margin: 0;
+  font-size: 20px;
+  color: #111827;
+}
+
+.section-header p {
+  margin: 6px 0 0;
+  font-size: 14px;
+  color: #64748b;
+}
+
+.form-group {
+  margin-bottom: 18px;
+}
+
+.form-group label {
+  display: inline-block;
+  margin-bottom: 8px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #334155;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  border: 1px solid #cbd5e1;
+  border-radius: 14px;
+  padding: 13px 14px;
+  background: #ffffff;
+  color: #0f172a;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.form-group textarea {
+  resize: vertical;
+  line-height: 1.6;
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+  color: #94a3b8;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  border-color: #4f46e5;
+  box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.12);
+}
+
+.form-group small {
+  display: block;
+  margin-top: 6px;
+  font-size: 12px;
+  color: #64748b;
+}
+
+.two-column {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.code-input {
+  min-height: 220px;
+  background: #0f172a !important;
+  color: #e5e7eb !important;
+  border-color: #1e293b !important;
+  font-family: "Fira Code", "Consolas", monospace;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.code-input::placeholder {
+  color: #94a3b8 !important;
+}
+
+.checkbox-group {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 8px;
+}
+
+.checkbox-group label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #334155;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.checkbox-group input {
+  width: 16px;
+  height: 16px;
+  accent-color: #4f46e5;
+}
+
+.form-actions {
+  position: sticky;
+  bottom: 0;
+  z-index: 10;
+  display: flex;
+  justify-content: flex-end;
+  gap: 14px;
+  padding: 18px 0 4px;
+  background: linear-gradient(to top, #eef2ff 60%, transparent);
+}
+
+.btn {
+  border: 0;
+  border-radius: 14px;
+  padding: 12px 18px;
+  font-size: 14px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+}
+
+.btn-primary {
+  color: #ffffff;
+  background: linear-gradient(135deg, #4f46e5, #7c3aed);
+  box-shadow: 0 12px 28px rgba(79, 70, 229, 0.28);
+}
+
+.btn-primary:hover {
+  box-shadow: 0 16px 34px rgba(79, 70, 229, 0.34);
+}
+
+.btn-secondary {
+  color: #ffffff;
+  background: #0f172a;
+}
+
+.btn-secondary:hover {
+  background: #1e293b;
+}
+
+.btn-light {
+  color: #334155;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+}
+
+.btn-light:hover {
+  background: #f8fafc;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .admin-page {
+    padding: 20px;
+  }
+
+  .page-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .form-grid,
+  .two-column {
+    grid-template-columns: 1fr;
+  }
+
+  .page-header h1 {
+    font-size: 28px;
+  }
+
+  .form-actions {
+    flex-direction: column;
+  }
+
+  .btn {
+    width: 100%;
+  }
+}
+
+
+
+
+

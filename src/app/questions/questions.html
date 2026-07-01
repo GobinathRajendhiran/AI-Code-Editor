@@ -1,0 +1,258 @@
+@if(showQuestionForm()) {
+    <div class="admin-page">
+  <div class="page-header">
+    <div>
+      <p class="eyebrow">Admin Panel</p>
+      <h1>Create Interview Question</h1>
+      <p class="subtitle">
+        Add coding problems for users to solve, analyze, and save their attempts.
+      </p>
+    </div>
+
+    <button class="btn btn-secondary" type="button">
+      View Questions
+    </button>
+  </div>
+
+  <form class="question-form">
+    <div class="form-grid">
+      
+      <!-- LEFT SECTION -->
+      <section class="form-card main-card">
+        <div class="section-header">
+          <h2>Question Details</h2>
+          <p>Basic details shown in the problem selector.</p>
+        </div>
+
+        <div class="form-group">
+          <label for="title">Question Title</label>
+          <input
+            id="title"
+            type="text"
+            placeholder="Example: Find the longest word in a sentence"
+          />
+        </div>
+
+        <div class="two-column">
+          <div class="form-group">
+            <label for="topic">Topic</label>
+            <select id="topic">
+              <option value="">Select topic</option>
+              <option>Array</option>
+              <option>String</option>
+              <option>Object</option>
+              <option>Promise</option>
+              <option>Recursion</option>
+              <option>Closure</option>
+              <option>Currying</option>
+              <option>DOM</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="difficulty">Difficulty</label>
+            <select id="difficulty">
+              <option value="">Select difficulty</option>
+              <option>Easy</option>
+              <option>Medium</option>
+              <option>Hard</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="brief">Brief Question</label>
+          <textarea
+            id="brief"
+            rows="3"
+            placeholder="Write a short explanation of what the user needs to solve..."
+          ></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="description">Full Description</label>
+          <textarea
+            id="description"
+            rows="6"
+            placeholder="Explain the problem clearly with input, output, and expected behavior..."
+          ></textarea>
+        </div>
+      </section>
+
+      <!-- RIGHT SECTION -->
+      <aside class="form-card side-card">
+        <div class="section-header">
+          <h2>Settings</h2>
+          <p>Control visibility and category.</p>
+        </div>
+
+        <div class="form-group">
+          <label for="status">Status</label>
+          <select id="status">
+            <option>Draft</option>
+            <option>Published</option>
+            <option>Archived</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="score">Question Score</label>
+          <input
+            id="score"
+            type="number"
+            placeholder="Example: 10"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="tags">Tags</label>
+          <input
+            id="tags"
+            type="text"
+            placeholder="array, string, interview"
+          />
+          <small>Separate tags using comma.</small>
+        </div>
+
+        <div class="checkbox-group">
+          <label>
+            <input type="checkbox" />
+            Show in problem selector
+          </label>
+
+          <label>
+            <input type="checkbox" />
+            Allow AI explanation
+          </label>
+
+          <label>
+            <input type="checkbox" />
+            Allow saved attempts
+          </label>
+        </div>
+      </aside>
+    </div>
+
+    <!-- EXAMPLES -->
+    <section class="form-card">
+      <div class="section-header">
+        <h2>Example Test Case</h2>
+        <p>Add sample input and output for users.</p>
+      </div>
+
+      <div class="two-column">
+        <div class="form-group">
+          <label for="sampleInput">Sample Input</label>
+          <textarea
+            id="sampleInput"
+            rows="4"
+            placeholder='Example: "I love JavaScript"'
+          ></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="sampleOutput">Sample Output</label>
+          <textarea
+            id="sampleOutput"
+            rows="4"
+            placeholder='Example: "JavaScript"'
+          ></textarea>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="explanation">Example Explanation</label>
+        <textarea
+          id="explanation"
+          rows="4"
+          placeholder="Explain why this output is correct..."
+        ></textarea>
+      </div>
+    </section>
+
+    <!-- STARTER CODE -->
+    <section class="form-card">
+      <div class="section-header">
+        <h2>Starter Code</h2>
+        <p>This code will be pre-filled in the code editor.</p>
+      </div>
+
+      <div class="form-group">
+        <label for="language">Language</label>
+        <select id="language">
+          <option>JavaScript</option>
+          <option>TypeScript</option>
+          <option>Python</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="starterCode">Starter Code</label>
+        <textarea
+          id="starterCode"
+          class="code-input"
+          rows="10"
+          spellcheck="false"
+          placeholder="function solve(input) {
+  // write your code here
+}"
+        ></textarea>
+      </div>
+    </section>
+
+    <!-- AI ANALYSIS GUIDE -->
+    <section class="form-card">
+      <div class="section-header">
+        <h2>AI Analyzer Guide</h2>
+        <p>Help AI understand what to check in user code.</p>
+      </div>
+
+      <div class="form-group">
+        <label for="expectedApproach">Expected Approach</label>
+        <textarea
+          id="expectedApproach"
+          rows="5"
+          placeholder="Example: Split the sentence into words, compare length, return the longest word..."
+        ></textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="constraints">Constraints</label>
+        <textarea
+          id="constraints"
+          rows="4"
+          placeholder="Example: Input will be a non-empty string. Return only the first longest word if multiple words have same length."
+        ></textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="commonMistakes">Common Mistakes</label>
+        <textarea
+          id="commonMistakes"
+          rows="4"
+          placeholder="Example: Not handling empty spaces, returning length instead of word, ignoring punctuation..."
+        ></textarea>
+      </div>
+    </section>
+
+    <!-- ACTIONS -->
+    <div class="form-actions">
+      <button class="btn btn-light" type="reset">
+        Clear
+      </button>
+
+      <button class="btn btn-secondary" type="button">
+        Save as Draft
+      </button>
+
+      <button class="btn btn-primary" type="submit">
+        Publish Question
+      </button>
+    </div>
+  </form>
+</div>
+}
+
+@if(showQuestionList()) {
+    
+}
