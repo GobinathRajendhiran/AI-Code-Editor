@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Signal, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Http } from '../../services/http/http';
@@ -54,7 +54,7 @@ export class Editor {
   selectedQuestion: InterviewQuestion | null = null;
 
   userCode = '';
-  aiResult: AiResult | null = null;
+  aiResult: any = signal(null);
   savedAttempts: SavedAttempt[] = [];
 
   questions: InterviewQuestion[] = [
@@ -132,14 +132,14 @@ console.log(reverseArray([1, 2, 3, 4]));`,
     if (!question) {
       this.selectedQuestion = null;
       this.userCode = '';
-      this.aiResult = null;
+      this.aiResult = signal(null);
       this.savedAttempts = [];
       return;
     }
 
     this.selectedQuestion = question;
     this.userCode = question.starterCode;
-    this.aiResult = null;
+    this.aiResult = signal(null);
 
     this.loadSavedAttempts(question.id);
   }
@@ -150,7 +150,7 @@ console.log(reverseArray([1, 2, 3, 4]));`,
     }
 
     this.userCode = this.selectedQuestion.starterCode;
-    this.aiResult = null;
+    this.aiResult = signal(null);
   }
 
   analyzeCode(): void {
@@ -172,42 +172,9 @@ console.log(reverseArray([1, 2, 3, 4]));`,
     };
 
     console.log('Send this payload to AI:', aiPayload);
-    this.httpService.analyzeCodeWithAI(aiPayload).subscribe(ele => {
-      console.log('Network data : ',ele)
+    this.httpService.analyzeCodeWithAI(aiPayload).subscribe((ele: any) => {
+      this.aiResult.set(ele);
     })
-
-    // Temporary dummy AI result
-    // Later replace this with actual API response
-    this.aiResult = {
-      score: 78,
-      correctness:
-        'Your solution is mostly correct, but it needs better edge case handling.',
-      codeQuality:
-        'Code is readable, but variable naming and input validation can be improved.',
-      timeComplexity:
-        'O(n), because the solution loops through the input once.',
-      spaceComplexity:
-        'O(1) or O(n), depending on whether you create an extra array.',
-      mistakes: [
-        'Edge cases are not fully handled.',
-        'No validation for empty input.',
-        'The solution can be explained better in interview style.'
-      ],
-      betterSolution: `function findLongestWord(sentence) {
-  const words = sentence.trim().split(/\\s+/);
-  let longest = words[0];
-
-  for (const word of words) {
-    if (word.length > longest.length) {
-      longest = word;
-    }
-  }
-
-  return longest;
-}`,
-      interviewExplanation:
-        'I split the sentence into words and used a loop to track the longest word. Since I visit each word once, the time complexity is O(n).'
-    };
   }
 
   saveAttempt(): void {
@@ -238,7 +205,7 @@ console.log(reverseArray([1, 2, 3, 4]));`,
 
   loadAttempt(attempt: SavedAttempt): void {
     this.userCode = attempt.code;
-    this.aiResult = null;
+    this.aiResult = signal(null);
   }
 
   private getStorageKey(questionId: string): string {

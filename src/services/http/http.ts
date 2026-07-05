@@ -9,7 +9,8 @@ export class Http {
   baseUrl: string = 'http://localhost:3000/'
   constructor(private http: HttpClient){}
 
-  analyzeCodeWithAI(code: any) {
-    return this.http.get(this.baseUrl+'/editor/submitCode?'+'code='+code);
+  analyzeCodeWithAI(userCode: any) {
+    console.log("code", userCode)
+    return this.http.post(this.baseUrl+'editor/submitCode', { code: userCode });
   }
 }

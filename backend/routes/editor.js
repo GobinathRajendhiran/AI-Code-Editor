@@ -3,6 +3,6 @@ var router = express.Router();
 var editorController = require('../controller/code-submission.controller.js')
 
 /* GET users listing. */
-router.get('/submitCode', editorController.submitCodeToAI);
+router.post('/submitCode', editorController.submitCodeToAI);
 
 module.exports = router;

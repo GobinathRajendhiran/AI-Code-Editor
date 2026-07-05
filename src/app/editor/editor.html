@@ -159,55 +159,57 @@
       </section>
 
       <!-- AI RESULT PANEL -->
-      <section class="result-card" *ngIf="aiResult">
-        <div class="result-header">
-          <h2>AI Result</h2>
-          <span class="score-pill">
-            Score: {{ aiResult.score }}/100
-          </span>
-        </div>
-
-        <div class="result-grid">
-          <div class="result-box">
-            <h3>Correctness</h3>
-            <p>{{ aiResult.correctness }}</p>
-          </div>
-
-          <div class="result-box">
-            <h3>Code Quality</h3>
-            <p>{{ aiResult.codeQuality }}</p>
-          </div>
-
-          <div class="result-box">
-            <h3>Time Complexity</h3>
-            <p>{{ aiResult.timeComplexity }}</p>
-          </div>
-
-          <div class="result-box">
-            <h3>Space Complexity</h3>
-            <p>{{ aiResult.spaceComplexity }}</p>
-          </div>
-        </div>
-
-        <div class="result-section">
-          <h3>Mistakes</h3>
-          <ul>
-            <li *ngFor="let mistake of aiResult.mistakes">
-              {{ mistake }}
-            </li>
-          </ul>
-        </div>
-
-        <div class="result-section">
-          <h3>Better Solution</h3>
-          <pre>{{ aiResult.betterSolution }}</pre>
-        </div>
-
-        <div class="result-section">
-          <h3>Interview Explanation</h3>
-          <p>{{ aiResult.interviewExplanation }}</p>
-        </div>
-      </section>
+       @if(aiResult()) {
+         <section class="result-card">
+           <div class="result-header">
+             <h2>AI Result</h2>
+             <span class="score-pill">
+               Score: {{ aiResult()?.score }}/100
+             </span>
+           </div>
+   
+           <div class="result-grid">
+             <div class="result-box">
+               <h3>Correctness</h3>
+               <p>{{ aiResult()?.correctness }}</p>
+             </div>
+   
+             <div class="result-box">
+               <h3>Code Quality</h3>
+               <p>{{ aiResult()?.codeQuality }}</p>
+             </div>
+   
+             <div class="result-box">
+               <h3>Time Complexity</h3>
+               <p>{{ aiResult()?.timeComplexity }}</p>
+             </div>
+   
+             <div class="result-box">
+               <h3>Space Complexity</h3>
+               <p>{{ aiResult()?.spaceComplexity }}</p>
+             </div>
+           </div>
+   
+           <div class="result-section">
+             <h3>Mistakes</h3>
+             <ul>
+               <li *ngFor="let mistake of aiResult()?.mistakes">
+                 {{ mistake }}
+               </li>
+             </ul>
+           </div>
+   
+           <div class="result-section">
+             <h3>Better Solution</h3>
+             <pre>{{ aiResult()?.betterSolution }}</pre>
+           </div>
+   
+           <div class="result-section">
+             <h3>Interview Explanation</h3>
+             <p>{{ aiResult()?.interviewExplanation }}</p>
+           </div>
+         </section>
+       }
 
       <!-- SAVED ATTEMPTS -->
       <section class="attempt-card" *ngIf="savedAttempts.length">
